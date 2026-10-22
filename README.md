@@ -14,16 +14,7 @@ In command prompt, type in
     sqlite3 resell.db < schema.sql
     sqlite3 resell.db < insert_data.sql
 
-
-## DATABASE SUMMARY
-7 tables: brand, category, sourcing location, platform, item, listing, sale.
-  - item references brand, category, sourcing location, etc.
-  - listing is the junction table for the many-to-many relationship between
-    item and platform. It stores list price, listed date, ended date, and status.
-  - sale references exactly one listing (UNIQUE listing_id, so a listing has
-    0 or 1 sale) and stores sale_price, platform_fee, and shipping_cost.
-
-## VIEW
+## VIEW Explanation
 v_sale_profit
 What it represents: one row per completed sale, with the item, brand, category,
 platform, and sourcing location, plus net profit and the days it took to sell.
@@ -35,7 +26,8 @@ computes it once. Reports such as profit by platform, brand, or store become
 simple GROUP BY queries, and the application can show per-sale profit without
 repeating the joins.
 
-## INDEX: idx_listing_status_listed
+## INDEX Explanation
+idx_listing_status_listed
 Columns: listing(status, listed_date).
 Supports: finding listings by status and listing age, for example "active
 listings that have been up more than 60 days without selling" (the stale
