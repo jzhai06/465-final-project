@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS brand;
 
 CREATE TABLE brand (
     brand_id    INTEGER PRIMARY KEY,
-    brand_name  TEXT NOT NULL UNIQUE          
+    brand_name  TEXT NOT NULL UNIQUE         
 );
 
 CREATE TABLE category (
@@ -24,13 +24,14 @@ CREATE TABLE sourcing_location (
     location_id   INTEGER PRIMARY KEY,
     location_name TEXT NOT NULL,
     city          TEXT NOT NULL,
-    UNIQUE (location_name, city)
+    UNIQUE (location_name, city)              
 );
 
 CREATE TABLE platform (
     platform_id   INTEGER PRIMARY KEY,
     platform_name TEXT NOT NULL UNIQUE,
-    fee_percent   REAL NOT NULL CHECK (fee_percent >= 0 AND fee_percent <= 100)  
+    fee_percent   REAL NOT NULL
+                  CHECK (fee_percent >= 0 AND fee_percent <= 100)   -- fee is a percentage of sale price
 );
 
 CREATE TABLE item (
@@ -39,7 +40,8 @@ CREATE TABLE item (
     category_id    INTEGER NOT NULL REFERENCES category(category_id),
     location_id    INTEGER REFERENCES sourcing_location(location_id),  -- NULL = bought online / mixed lot
     title          TEXT NOT NULL,
-    condition      TEXT NOT NULL DEFAULT 'Good' CHECK (condition IN ('New', 'Excellent', 'Good', 'Fair', 'Poor')),
+    condition      TEXT NOT NULL DEFAULT 'Good'
+                   CHECK (condition IN ('New', 'Excellent', 'Good', 'Fair', 'Poor')),
     purchase_cost  REAL NOT NULL CHECK (purchase_cost >= 0),
     acquired_date  TEXT NOT NULL              
 );
@@ -49,18 +51,19 @@ CREATE TABLE listing (
     item_id      INTEGER NOT NULL REFERENCES item(item_id),
     platform_id  INTEGER NOT NULL REFERENCES platform(platform_id),
     list_price   REAL NOT NULL CHECK (list_price > 0),
-    listed_date  TEXT NOT NULL,               -- ISO date
-    ended_date   TEXT,                        -- NULL while the listing is still live
+    listed_date  TEXT NOT NULL,               
+    ended_date   TEXT,                        
     status       TEXT NOT NULL DEFAULT 'active'
                  CHECK (status IN ('active', 'sold', 'ended')),
     CHECK (ended_date IS NULL OR ended_date >= listed_date),
-    CHECK ((status = 'active' AND ended_date IS NULL) OR (status IN ('sold', 'ended') AND ended_date IS NOT NULL))
+    CHECK ((status = 'active' AND ended_date IS NULL)
+        OR (status IN ('sold', 'ended') AND ended_date IS NOT NULL))
 );
 
 CREATE TABLE sale (
     sale_id        INTEGER PRIMARY KEY,
     listing_id     INTEGER NOT NULL UNIQUE REFERENCES listing(listing_id),
-    sale_date      TEXT NOT NULL,             -- ISO date
+    sale_date      TEXT NOT NULL,      
     sale_price     REAL NOT NULL CHECK (sale_price > 0),
     platform_fee   REAL NOT NULL DEFAULT 0 CHECK (platform_fee >= 0),
     shipping_cost  REAL NOT NULL DEFAULT 0 CHECK (shipping_cost >= 0)
@@ -73,11 +76,11 @@ SELECT
     s.sale_id,
     s.sale_date,
     i.item_id,
-    i.title AS item_title,
+    i.title                       AS item_title,
     b.brand_name,
     c.category_name,
     p.platform_name,
-    sl.location_name AS sourcing_location, 
+    sl.location_name              AS sourcing_location,   
     i.purchase_cost,
     s.sale_price,
     s.platform_fee,
