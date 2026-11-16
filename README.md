@@ -1,6 +1,45 @@
 # 465-final-project
 
-# Reselling Tracker - Deliverable 3: Backend Implementation and Data
+# Reselling Tracker - Deliverable 5: Application
+
+## Application
+
+The application is a Python 3 command-line interface using SQLite's standard
+library driver. The relational database remains the primary store; all
+user-supplied values are passed through parameterized SQL statements.
+
+## Setup and run
+
+From this directory, recreate the database (the first command removes and
+recreates the schema):
+
+```text
+sqlite3 resell.db < schema.sql
+sqlite3 resell.db < insert_data.sql
+python app.py
+```
+
+Python 3.9 or newer is recommended. No third-party packages are required. A
+different database can be selected with `python app.py --db path/to/file.db`.
+
+## Application operations
+
+The interactive menu provides:
+
+1. **Search or browse items** - searches item titles and brands and shows active listing counts.
+2. **View item listings** - joins items, brands, categories, listings, and platforms.
+3. **Add an item** - inserts a validated item using existing brand and category IDs.
+4. **Add a listing** - inserts a validated active listing.
+5. **Update a listing price** - updates an existing listing after checking its ID.
+6. **Record a sale** - uses a transaction to insert the sale, mark its listing sold,
+   and end the item's other active listings.
+7. **Profit report** - groups the `v_sale_profit` view by platform and reports revenue,
+   net profit, and average days to sell.
+
+The application reports missing records, invalid input, constraint violations,
+and database errors without exposing a traceback during normal use.
+
+# Backend files
 
 ## DBMS USED
 SQLite 3 
