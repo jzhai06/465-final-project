@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reselling Tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail">
+      <a class="wordmark" href="#" aria-label="Reselling Tracker home">
+        <span class="wordmark-symbol">R</span>
+        <span>Reselling<br><b>Tracker</b></span>
+      </a>
+      <nav class="rail-nav" aria-label="Primary navigation">
+        <button class="nav-item active" data-view="dashboard"><span>01</span><b>Overview</b></button>
+        <button class="nav-item" data-view="inventory"><span>02</span><b>Inventory</b></button>
+        <button class="nav-item" data-view="report"><span>03</span><b>Analytics</b></button>
+      </nav>
+      <button class="rail-action" id="openAddItem"><span>+</span> Add item</button>
+    </aside>
+
+    <main class="workspace">
+      <header class="masthead">
+        <div class="masthead-title">
+          <p id="pageEyebrow">Resale operations</p>
+          <h1 id="pageTitle">Good morning.</h1>
+        </div>
+        <div class="masthead-actions">
+          <button class="circle-button" id="refreshButton" title="Refresh data" aria-label="Refresh">&#8635;</button>
+          <button class="ink-button" data-action="add-item">New item <span>+</span></button>
+        </div>
+      </header>
+
+      <section class="view active" id="dashboardView">
+        <div class="hero-grid">
+          <article class="hero-card">
+            <div class="hero-label"><span>Net profit</span><span class="live-dot">Live</span></div>
+            <strong id="statProfit">$0.00</strong>
+            <p>Across all completed sales</p>
+            <div class="hero-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+          </article>
+          <article class="metric-card">
+            <p>Inventory</p><strong id="statInventory">0</strong><span>items sourced</span>
+            <div class="metric-rule"></div><small>02</small>
+          </article>
+          <article class="metric-card coral">
+            <p>Active listings</p><strong id="statListings">0</strong><span>currently live</span>
+            <div class="metric-rule"></div><small>03</small>
+          </article>
+          <article class="metric-card yellow">
+            <p>Completed sales</p><strong id="statSales">0</strong><span>sales recorded</span>
+            <div class="metric-rule"></div><small>04</small>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <article class="ledger-card">
+            <div class="card-head"><div><p>Latest activity</p><h2>Recent sales</h2></div><button data-action="record-sale">Record sale</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Item</th><th>Brand</th><th>Sold</th><th>Sale</th><th>Profit</th></tr></thead><tbody id="recentSales"></tbody></table></div>
+          </article>
+          <aside class="action-card">
+            <p>Quick action</p>
+            <h2>Keep the<br>floor moving.</h2>
+            <button data-action="add-listing"><span>Create listing</span><b>↗</b></button>
+            <button data-action="record-sale"><span>Close a sale</span><b>↗</b></button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="inventoryView">
+        <div class="toolbar">
+          <label class="search-box"><span>⌕</span><input id="inventorySearch" type="search" placeholder="Search title or brand"></label>
+          <select id="inventoryStatus"><option value="">All items</option><option value="active">Active listings</option><option value="unsold">No active listing</option></select>
+        </div>
+        <article class="ledger-card inventory-ledger">
+          <div class="card-head"><div><p>Collection</p><h2>Inventory index</h2></div></div>
+          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Item</th><th>Brand</th><th>Category</th><th>Condition</th><th>Cost</th><th>Active</th></tr></thead><tbody id="inventoryTable"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="view" id="reportView">
+        <div class="stats-grid" id="reportStats"></div>
+        <article class="ledger-card">
+          <div class="card-head"><div><p>Performance</p><h2>Profit by platform</h2></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Platform</th><th>Sales</th><th>Revenue</th><th>Net profit</th><th>Avg. days</th></tr></thead><tbody id="platformReport"></tbody></table></div>
+        </article>
+        <article class="ledger-card"><div class="card-head"><div><p>Trend</p><h2>Monthly profit</h2></div></div><div class="chart" id="profitChart"></div></article>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="modal-header"><div><p class="eyebrow">Reselling Tracker</p><h2 id="modalTitle"></h2></div><button class="icon-button" id="closeModal" aria-label="Close">&times;</button></header>
+      <form id="modalForm"></form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
