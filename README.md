@@ -32,8 +32,11 @@ The project uses SQLite 3. No hosted service or account is required.
 
 ## Database setup
 
-Install SQLite 3 and Python 3.9 or newer. From the repository directory,
-create the database:
+Install SQLite 3 and Python 3.9 or newer. The web application creates
+`resell.db` automatically from `schema.sql` and `insert_data.sql` when the
+database is missing or has no `item` table.
+
+For manual setup, from the repository directory run:
 
 ```text
 sqlite3 resell.db < schema.sql
@@ -115,7 +118,7 @@ before starting the application.
 
 The `v_sale_profit` view centralizes the multi-table profit calculation:
 `sale_price - platform_fee - shipping_cost - purchase_cost`. The
-``idx_listing_status_listed` index supports searches for active listings by
+python web_app.py``idx_listing_status_listed` index supports searches for active listings by
 status and listed date. The application is a local Flask interface and does
 not provide user accounts or concurrent multi-user access.
 

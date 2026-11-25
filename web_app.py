@@ -21,6 +21,26 @@ def get_db():
     return connection
 
 
+def ensure_database():
+    """Create the local database from repository SQL if it is missing or empty."""
+    database = app.config["DATABASE"]
+    database.parent.mkdir(parents=True, exist_ok=True)
+    with get_db() as connection:
+        table = connection.execute(
+            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'item'"
+        ).fetchone()
+        if table is not None:
+            return
+
+    root = Path(__file__).resolve().parent
+    with sqlite3.connect(database) as connection:
+        connection.executescript((root / "schema.sql").read_text(encoding="utf-8"))
+        connection.executescript((root / "insert_data.sql").read_text(encoding="utf-8"))
+
+
+ensure_database()
+
+
 def rows_json(rows):
     return [dict(row) for row in rows]
 
